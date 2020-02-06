@@ -11,15 +11,18 @@ destroy: deletar alguma sessão
 import User from '../models/User';
 
 class SessionControler {
+// chamamos a requisição store com o async porque é uma função assíncrona.
+//criamos o email é criado dentro da chave de forma desconstruída. 
+//email criado no banco de dados o await indica que ele irá esperar até fazer e depois e irá para a próxima linha usando uma verificação se existe ou não.
+ // retorna para o usuário o email criado
 
-  async store(req, res){ // chamamos a requisição store com o async porque é uma função assíncrona.
-    const { email } = req.body; //criamos o email é criado dentro da chave de forma desconstruída. 
+  async store(req, res){ 
+    const { email } = req.body; 
 
     let user = await User.findOne({ email })
       if (!user){
-        user = await User.create({ email }) //email criado no banco de dados o await indica que ele irá esperar até fazer e depois e irá para a próxima linha 
+        user = await User.create({ email }) 
       }
-       // retorna para o usuário o email criado
       return res.json(user);
 
   }
