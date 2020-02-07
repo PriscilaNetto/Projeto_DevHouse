@@ -5,7 +5,7 @@ const HouseSchema = new Schema ({
   thumbnail: String, // aqui vai ficar o caminho de onde a imagem está
   description: String,
   price: Number,
-  location: String,
+  address: String,
   status: Boolean,
   user:{
     type: Schema.Types.ObjectId, //para buscar pelo id qual é o usuário 
