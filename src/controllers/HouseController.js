@@ -1,29 +1,26 @@
 import User from '../models/House';
 
+import House from '../models/House';
+
 class HouseController{
-
+   
   async store(req, res) {
-    console.log(req.body);
+    const { filename } = req.file;
+    const { description, price, location, status } = req.body;
+    const { user_id } = req.headers;
 
-    console.log(req.file);
-    
-    
-
-    return res.json({message: 'ok'})
+    const house = await House.create ({
+      user: user_id,
+      thumbnail: filename,
+      description,
+      price,
+      location,
+      status,
+    });
+  
+    return res.json({house})
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 export default new HouseController();
