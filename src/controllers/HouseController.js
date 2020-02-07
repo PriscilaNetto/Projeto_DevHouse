@@ -3,6 +3,14 @@ import User from '../models/House';
 import House from '../models/House';
 
 class HouseController{
+
+  async index(req, res) {
+    const { status } = req.query;
+
+    const houses = await House.find({ status })
+    return res.json(houses);
+
+  }
    
   async store(req, res) {
     const { filename } = req.file;
