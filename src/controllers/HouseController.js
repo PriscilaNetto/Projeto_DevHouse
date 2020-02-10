@@ -39,12 +39,11 @@ class HouseController{
     const houses = await House.findById(house_id);
     
     if(String(user._id) !== String(houses.user)){
-      return res.status(401).send('Não autorizado!');
+       return res.status(401).send('Não autorizado!');
     }
 
 
-
-    const houses = await House.updateOne({ _id: house_id },{
+    await House.updateOne({ _id: house_id },{
       user: user_id,
       thumbnail: filename,
       description,
@@ -55,6 +54,22 @@ class HouseController{
 
 
     return res.send('Dados alterados com sucesso!');
+  }
+
+  async destroy(req, res){
+    const { house_id} = req.body;
+    const {user_id} = req.headers;
+
+    const user = await User.findById(user_id);
+    const houses = await House.findById(house_id);
+    
+    if(String(user._id) !== String(houses.user)){
+      return res.status(401).send('Não autorizado!');
+    }
+
+    await House.findByIdAndDelete({ _id: house_id})
+
+    return res.status(200).send("Imóvel excluído com sucesso!")
   }
 
 }
