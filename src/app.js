@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import path from 'path';
 import routes from './routes';
 
@@ -17,6 +18,8 @@ class App{
     this.routes();
   }
   middlewares(){
+
+    this.server.use(cors());
 
     this.server.use(
       '/files',
