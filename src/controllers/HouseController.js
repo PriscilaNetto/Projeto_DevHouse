@@ -1,6 +1,7 @@
-import User from '../models/House';
 import House from '../models/House';
 import User from '../models/User';
+import * as Yup from 'Yup';
+
 
 class HouseController{
 
@@ -13,10 +14,24 @@ class HouseController{
   }
    
   async store(req, res) {
+    const schema = Yup.object().shape({ 
+      description: Yup.string().required(),
+      price: Yup.number().required(),
+      address: Yup.string().required(),
+      status: Yup.boolean().required(),
+    });
+
     const { filename } = req.file;
     const { description, price, address, status } = req.body;
     const { user_id } = req.headers;
 
+    if(!(await schema.isValid(req.body))){
+      
+      
+      return res.status(400).send('Falha na validação.')
+    }
+
+    
     const house = await House.create ({
       user: user_id,
       thumbnail: filename,
@@ -30,10 +45,24 @@ class HouseController{
   }
 
   async update(req, res) {
+    const schema = Yup.object().shape({ 
+      description: Yup.string(),
+      price: Yup.number(),
+      address: Yup.string(),
+      status: Yup.boolean(),
+    });
+
+
     const { filename } = req.file;
     const { house_id } = req.params;
     const { description, price, address, status } = req.body;
     const { user_id } = req.headers;
+
+    if(!(await schema.isValid(req.body))){
+      
+      
+      return res.status(400).send('Falha na validação.')
+    }
 
     const user = await User.findById(user_id);
     const houses = await House.findById(house_id);

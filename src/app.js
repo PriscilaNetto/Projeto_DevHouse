@@ -4,6 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import routes from './routes';
 
+
 class App{
 
   constructor(){
