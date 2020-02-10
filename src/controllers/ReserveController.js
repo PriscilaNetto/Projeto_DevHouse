@@ -3,32 +3,30 @@ import User from '../models/User';
 import House from '../models/House';
 
 class ReserveController {
-
-  async index(req, res){
+  async index(req, res) {
     const { user_id } = req.headers;
-    
-    const reserves = await Reserve.find({user: user_id}).populate('house')
+
+    const reserves = await Reserve.find({ user: user_id }).populate('house');
 
     return res.json(reserves);
-    
   }
 
-  async store(req, res){
-    const {user_id} = req.headers;
-    const {house_id} = req.params;
-    const {date} = req.body;
+  async store(req, res) {
+    const { user_id } = req.headers;
+    const { house_id } = req.params;
+    const { date } = req.body;
 
     const house = await House.findById(house_id);
-    if(!house){
+    if (!house) {
       return res.status(401).send('Essa casa não existe!');
     }
 
-    if(house.status !== true){
+    if (house.status !== true) {
       return res.status(400).send('Solicitação indisponível.');
     }
 
-    const user = await User.findById(user_id);
-    if(String(user._id) === String(house.user)){
+    await User.findById(user_id);
+    if (String(user_id) === String(house.user)) {
       return res.status(401).send('Reserva não permitida.');
     }
 
@@ -36,24 +34,23 @@ class ReserveController {
       user: user_id,
       house: house_id,
       date,
-
     });
 
-    await reserve.populate('house').populate('user').execPopulate();
+    await reserve
+      .populate('house')
+      .populate('user')
+      .execPopulate();
 
     return res.json(reserve);
   }
 
-  async destroy(req, res){
+  async destroy(req, res) {
     const { reserve_id } = req.body;
 
-    await Reserve.findByIdAndDelete({_id: reserve_id})
+    await Reserve.findByIdAndDelete({ _id: reserve_id });
 
-    return res.status(200).send('Reserva cancelada com sucesso!')
+    return res.status(200).send('Reserva cancelada com sucesso!');
   }
-
-
 }
-
 
 export default new ReserveController();
